@@ -1,11 +1,10 @@
-// Adjust the values in the parameters for your own use case.
+var scripts = document.getElementsByTagName('script');
+var scriptUrl = new URL("http://" + scripts[scripts.length-1].attributes.src.value);
+
 const PARAMS = {
-  // The trackingId is the one you use on your Google Analytics.
-  // Note: GA4 is still not supported on this version.
-  trackingId: 'YOUR_TRACKING_ID', // <<<---- CHANGE THIS VALUE
-  // The domainId can be obtained on your dashboard at datamilk.app.
-  domainId: 'YOUR_DOMAIN_ID_AT_DATAMILK', // <<<---- CHANGE THIS VALUE
-};
+  trackingId: scriptUrl.searchParams.get("gaTrackingId"),
+  domainId: scriptUrl.searchParams.get("domainId"),
+}
 
 const COOKIE_EXPIRATION_DAYS = 56;
 const COOKIE_DATAMILK_AB_KEY = 'datamilk_ab_selection';

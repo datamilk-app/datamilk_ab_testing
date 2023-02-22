@@ -1,6 +1,7 @@
 import { expect, jest, test } from '@jest/globals';
 
-const GA_MOCK_TRACKING_ID = 'YOUR_TRACKING_ID';
+const GA_MOCK_TRACKING_ID = 'MOCK_GA_TRACKING_ID';
+const MOCK_DOMAIN_ID = 'MOCK_DOMAIN_ID';
 const GA = 'ga';
 const MOCK_GOOGLE_ANALYTICS_OBJECT = 'mock-google-analytics-object';
 const GOOGLE_ANALYTICS_OBJECT = 'GoogleAnalyticsObject';
@@ -39,6 +40,13 @@ describe('AB testing for DataMilk Service', () => {
     window[MOCK_GOOGLE_ANALYTICS_OBJECT] = undefined;
     window[GOOGLE_ANALYTICS_OBJECT] = undefined;
     window[GA] = undefined;
+    jest.spyOn(document, 'getElementsByTagName').mockReturnValue([{
+      attributes: {
+        src: {
+          value: `www.mock-domain.com?gaTrackingId=${GA_MOCK_TRACKING_ID}&domainId=${MOCK_DOMAIN_ID}`,
+        }
+      }
+    }] as any);
   });
 
   afterEach(() => {
@@ -79,7 +87,7 @@ describe('AB testing for DataMilk Service', () => {
     'Google Analytics Availability and first event',
     ({ isDirectGAObject, trackingIds, getAllShouldThrow, gaAvailableOnAttempt, expectingSend }) => {
       jest.isolateModules(() => {
-        jest.spyOn(document, 'cookie', 'get').mockReturnValue(undefined);
+        jest.spyOn(document, 'cookie', 'get').mockReturnValue(undefined as unknown as string);
         jest.spyOn(Math, 'random').mockReturnValue(0.8);
 
         // eslint-disable-next-line max-len
@@ -89,7 +97,7 @@ describe('AB testing for DataMilk Service', () => {
           if (getAllShouldThrow) {
             throw new Error('mock-error-on-getAll');
           }
-          return setUpMockGA(trackingIds);
+          return setUpMockGA(trackingIds as unknown as string[]);
         });
         const mockGA = jest.fn();
         // eslint-disable-next-line dot-notation
@@ -105,7 +113,7 @@ describe('AB testing for DataMilk Service', () => {
         if (gaAvailableOnAttempt === 0) {
           configureGAMock();
         }
-        require('./ab_test_datamilk');
+        require(`./ab_test_datamilk`);
         if (gaAvailableOnAttempt === 0) {
           expect(mockGetAll).toHaveBeenCalledTimes(1);
         } else {
@@ -269,7 +277,7 @@ describe('AB testing for DataMilk Service', () => {
               // eslint-disable-next-line accessor-pairs, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
               set src(source: any) {
                 expect(source).toEqual(
-                  'https://datamilk.app/magic_ai.js?id=YOUR_DOMAIN_ID_AT_DATAMILK'
+                  `https://datamilk.app/magic_ai.js?id=${MOCK_DOMAIN_ID}`
                 );
                 expect(spyOnGetCookie).toHaveBeenCalled();
                 if (hasSavedCookie) {
