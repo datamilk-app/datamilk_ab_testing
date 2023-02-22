@@ -5,13 +5,17 @@ Tools that customers can use to A/B test DataMilk solution using their Google An
 ## How to Install
 
 * Copy the src/ab_test_datamilk.js file to your own server (see topic regarding optional minification below)
-*  copy the following script to HEAD
+* Add the following code to HEAD
 ```
 <script src="PATH_TO_SCRIPT_ON_YOUR_SERVER?gaTrackingId=YOUR_GA_TRACKING_ID&domainId=YOUR_DATAMILK_DOMAIN_ID">
 </script>
 ```
   * the GA trackingId can be copied from your Google Analytics Console
   * the domainId parameter can be copied from your DataMilk dashboard (please, contact customer support if you need assistance)
+
+## What about the conversion pixel?
+
+For simplicity, you can keep the integration of the conversion pixel active for all pages as DataMilk will automatically ignore the ones that are not on the B track.
 
 ## How to confirm it is working
 
