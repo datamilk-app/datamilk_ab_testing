@@ -1,0 +1,18 @@
+# Distribution / packaging
+**/dist
+
+# We rely on yarn.lock
+**/package-lock.json
+yarn-error.log
+
+# Node modules
+**/node_modules
+
+.vscode/PythonImportHelper-v2-Completion.json
+
+# test coverage files
+**/coverage/*
+
+# Yarn lock files not in the root directory
+**/yarn.lock
+!/yarn.lock
